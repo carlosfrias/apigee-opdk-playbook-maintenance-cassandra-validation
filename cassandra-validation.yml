@@ -6,18 +6,38 @@
   - apigee-opdk-setup-default-settings
   tasks:
   - name: Capture nodetool status
-    shell: "{{ apigee_installation_home }}/apigee-cassandra/bin/nodetool -h 127.0.0.1 status"
+    shell: "{{ nodetool }} -h 127.0.0.1 status"
     register: status
+    tags:
+    - status
 
   - name: Report nodetool status
     debug:
       var: status.stdout_lines
+    tags:
+    - status
 
   - name: Capture nodetool ring
-    shell: "{{ apigee_installation_home }}/apigee-cassandra/bin/nodetool -h 127.0.0.1 ring"
+    shell: "{{ nodetool }} -h 127.0.0.1 ring"
     register: ring
+    tags:
+    - ring
 
   - name: Report nodetool ring status
     debug:
       var: ring.stdout_lines
+    tags:
+    - ring
+
+  - name: Prepare file for show schema
+    copy:
+      content: 'echo "show schema;"'
+       dest: '/tmp/get_schema.cql'
+    tags:
+    - schema
+
+  - name: Show cassandra schema
+    shell: "{{ cassandra_cli }} -h 127.0.0.1 -f /tmp/get_schema.sql"
+    tags:
+    - schema
 
