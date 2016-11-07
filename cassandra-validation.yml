@@ -1,7 +1,9 @@
 ---
 - include: configuration/update_cache.yml
 
-- hosts: "{{ hosts }}"
+- hosts: ds
+  vars:
+    schema_cql: '/tmp/get_schema.cql'
   roles:
   - apigee-opdk-setup-default-settings
   tasks:
@@ -29,15 +31,24 @@
     tags:
     - ring
 
-  - name: Prepare file for show schema
+  - name: Prepare cql file to show schema
+    become: yes
     copy:
-      content: 'echo "show schema;"'
-       dest: '/tmp/get_schema.cql'
+      content: 'show schema;'
+      dest: '{{ schema_cql }}'
     tags:
     - schema
 
+  - name: Read cassandra schema
+    become: yes
+    shell: "{{ cassandra_cli }} -h {{ local_address }} -f {{ schema_cql }}"
+    tags:
+    - schema
+    register: schema
+
   - name: Show cassandra schema
-    shell: "{{ cassandra_cli }} -h 127.0.0.1 -f /tmp/get_schema.sql"
+    debug:
+      var: schema.stdout_lines
     tags:
     - schema
 

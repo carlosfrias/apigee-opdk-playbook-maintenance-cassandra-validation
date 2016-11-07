@@ -1,0 +1,5 @@
+---
+- hosts: ds
+  roles:
+  - apigee-opdk-cassandra-repair
+  - apigee-opdk-cassandra-rebuild
