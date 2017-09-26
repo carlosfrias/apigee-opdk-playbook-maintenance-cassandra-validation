@@ -10,45 +10,38 @@
   - name: Capture nodetool status
     shell: "{{ nodetool }} -h 127.0.0.1 status"
     register: status
-    tags:
-    - status
+    tags: ['status']
 
   - name: Report nodetool status
     debug:
       var: status.stdout_lines
-    tags:
-    - status
+    tags: ['status']
 
   - name: Capture nodetool ring
     shell: "{{ nodetool }} -h 127.0.0.1 ring"
     register: ring
-    tags:
-    - ring
+    tags: ['ring']
 
   - name: Report nodetool ring status
     debug:
       var: ring.stdout_lines
-    tags:
-    - ring
+    tags: ['ring']
 
   - name: Prepare cql file to show schema
     become: yes
     copy:
       content: 'show schema;'
       dest: '{{ schema_cql }}'
-    tags:
-    - schema
+    tags: ['schema']
 
   - name: Read cassandra schema
     become: yes
     shell: "{{ cassandra_cli }} -h {{ local_address }} -f {{ schema_cql }}"
-    tags:
-    - schema
+    tags: ['schema']
     register: schema
 
   - name: Show cassandra schema
     debug:
       var: schema.stdout_lines
-    tags:
-    - schema
+    tags: ['schema']
 

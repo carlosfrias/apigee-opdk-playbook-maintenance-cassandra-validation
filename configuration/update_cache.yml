@@ -2,6 +2,7 @@
 - hosts: planet
   vars_files:
   - ~/.apigee/credentials.yml
+  tags: ['cache']
   pre_tasks:
   - setup:
   - ec2_facts:
