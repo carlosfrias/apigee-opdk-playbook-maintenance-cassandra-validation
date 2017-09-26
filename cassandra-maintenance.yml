@@ -3,5 +3,5 @@
   gather_facts: no
   serial: 1
   roles:
-  - apigee-opdk-cassandra-repair
-  - apigee-opdk-cassandra-rebuild
+  - { role: apigee-opdk-cassandra-repair }
+  - { role: apigee-opdk-cassandra-rebuild, opdk_region: 'dc-1' }
