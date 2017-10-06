@@ -36,7 +36,7 @@
 
   - name: Read cassandra schema
     become: yes
-    shell: "{{ cassandra_cli }} -h {{ local_address }} -f {{ schema_cql }}"
+    shell: "{{ cassandra_cli }} -h {{ private_address }} -f {{ schema_cql }}"
     tags: ['schema']
     register: schema
 
